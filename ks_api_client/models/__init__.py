@@ -20,6 +20,8 @@ from ks_api_client.models.existing_sor_order import ExistingSOROrder
 from ks_api_client.models.fault import Fault
 from ks_api_client.models.gtcmodify import Gtcmodify
 from ks_api_client.models.gtcplace import Gtcplace
+from ks_api_client.models.inline_object import InlineObject
+from ks_api_client.models.margin_det import MarginDet
 from ks_api_client.models.new_mis_order import NewMISOrder
 from ks_api_client.models.new_mtf_order import NewMTFOrder
 from ks_api_client.models.new_normal_order import NewNormalOrder
@@ -27,6 +29,7 @@ from ks_api_client.models.new_order import NewOrder
 from ks_api_client.models.new_sm_order import NewSMOrder
 from ks_api_client.models.new_sor_order import NewSOROrder
 from ks_api_client.models.order_info import OrderInfo
+from ks_api_client.models.orders import Orders
 from ks_api_client.models.req_margin import ReqMargin
 from ks_api_client.models.tslomodify import Tslomodify
 from ks_api_client.models.tsloplace import Tsloplace

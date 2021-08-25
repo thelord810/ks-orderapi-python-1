@@ -1,39 +1,53 @@
 import ks_api_client
 import base64
 import json
+import os
+import socketio
+from urllib3 import make_headers
 
 from ks_api_client.exceptions import ApiException, ApiValueError
 from ks_api_client.models import NewMTFOrder, NewNormalOrder, NewOrder, \
                 NewSMOrder, NewSOROrder, ExistingMTFOrder, ExistingNormalOrder, \
                 ExistingOrder, ExistingSMOrder, ExistingSOROrder, ReqMargin, \
-                UserCredentials, UserDetails, NewMISOrder
-
-from urllib3 import make_headers
+                UserCredentials, UserDetails, NewMISOrder, InlineObject
 
 class KSTradeApi():
-    def __init__(self, access_token, userid, consumer_key, ip, app_id, host = "https://tradeapi.kotaksecurities.com/apim", proxy_url = '',\
-                proxy_user = '', proxy_pass = ''):
-        self.host  =  host
+    def __init__(self, access_token, userid, consumer_key, ip, app_id, 
+            hosts=["https://tradeapi.kotaksecurities.com/apim","https://sbx.kotaksecurities.com/apim"],
+            proxy_url = '', proxy_user = '', proxy_pass = ''):
         self.userid  =  userid
         self.consumer_key  =  consumer_key
         self.ip  =  ip
         self.app_id  =  app_id
         self.access_token  =  access_token
-        configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
-        self.api_client  =  ks_api_client.ApiClient(configuration)
-        session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
-                              self.consumer_key, self.ip, self.app_id)
-        session_init = ''				  
-        if(session_init_res.get("Success")):
-            session_init = session_init_res.get("Success")
-        elif(session_init_res.get("success")):
-            session_init = session_init_res.get("success")
-        if self.host !=  session_init['redirect']['host']:
-            self.host  =  session_init['redirect']['host']
+        self._proxy_user = proxy_user
+        self._proxy_pass = proxy_pass
+        self._proxy_url = proxy_url
+        error = None
+        session_init = None
+        for host in hosts:
+            self.host = host
             configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
-            self.api_client  =  ks_api_client.ApiClient(configuration)
-            session_init  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
-                              self.consumer_key, self.ip, self.app_id)
+            try:
+                self.api_client  =  ks_api_client.ApiClient(configuration)
+                session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
+                                self.consumer_key, self.ip, self.app_id)
+            except ApiException as ex:
+                error = ex
+                continue
+            if(session_init_res.get("Success")):
+                session_init = session_init_res.get("Success")
+            elif(session_init_res.get("success")):
+                session_init = session_init_res.get("success")
+            if self.host !=  session_init['redirect']['host']:
+                self.host  =  session_init['redirect']['host']
+                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+                self.api_client  =  ks_api_client.ApiClient(configuration)
+                session_init  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
+                                self.consumer_key, self.ip, self.app_id)
+            break
+        if not session_init and error:
+            raise error
 
     def get_config(self, proxy_url = '', proxy_user = '', proxy_pass = ''):
         configuration  =  ks_api_client.Configuration(self.host)
@@ -48,7 +62,7 @@ class KSTradeApi():
         user_credentials  =  UserCredentials(userid = self.userid, password = password)
         login_response_res  =  ks_api_client.SessionApi(self.api_client).login_with_user_id(self.consumer_key, \
                 self.ip, self.app_id, UserCredentials = user_credentials)
-        login_response = ''				  
+        login_response = ''
         if(login_response_res.get("Success")):
             login_response = login_response_res.get("Success")
         elif(login_response_res.get("success")):
@@ -56,12 +70,20 @@ class KSTradeApi():
         self.one_time_token  =  login_response['oneTimeToken']
         return login_response_res
 		
-    def session_2fa(self, access_code):
-        user_details  =  UserDetails(userid = self.userid, accessCode = access_code)
+    def session_2fa(self, access_code=None):
         if self.one_time_token:
-            generate_session_res  =  ks_api_client.SessionApi(self.api_client).generate_session2_fa(self.one_time_token, \
-                    self.consumer_key, self.ip, self.app_id, UserDetails = user_details)
-            generate_session = ''				  
+            generate_session_res = None
+            if not access_code:
+                inline_object = InlineObject(userid=self.userid)
+                generate_session_res  =  ks_api_client.SessionApi(self.api_client)\
+                        .generate_session2_fa_ott(self.one_time_token, \
+                        self.consumer_key, self.ip, self.app_id, InlineObject = inline_object)
+            else:
+                user_details  =  UserDetails(userid = self.userid, accessCode = access_code)
+                generate_session_res  =  ks_api_client.SessionApi(self.api_client)\
+                        .generate_session2_fa(self.one_time_token, \
+                        self.consumer_key, self.ip, self.app_id, UserDetails = user_details)
+            generate_session = None				  
             if(generate_session_res.get("Success")):
                 generate_session = generate_session_res.get("Success")
             elif(generate_session_res.get("success")):
@@ -69,7 +91,7 @@ class KSTradeApi():
             self.session_token  =  generate_session['sessionToken']
             return generate_session
         else:
-            raise ApiValueError("Please invoke 'session_login_api' function first")
+            raise ApiValueError("No one time token found. Please invoke 'session_login_api' function first")
 
     def logout(self):
         logout  =  ks_api_client.SessionApi(self.api_client).session_logout(self.session_token,self.consumer_key,\
@@ -132,7 +154,7 @@ class KSTradeApi():
 # Common methods for modifiying order
 
 		
-    def modify_order(self, order_id, price , quantity , disclosed_quantity , trigger_price ,validity):
+    def modify_order(self, order_id, price , quantity , disclosed_quantity , trigger_price , validity):
         """
         Method executes modifying_orders
         return response.
@@ -177,12 +199,17 @@ class KSTradeApi():
 
 #---------------------ORDERS REPORTS----------------------------
 
-    def order_report(self, order_id  = None):
+    def order_report(self, order_id = None, is_fno = False):
         if order_id is None:
             order_report  =  ks_api_client.ReportsApi(self.api_client).get_order_reports(self.consumer_key, \
                     self.session_token)
+        elif is_fno is True:
+            order_report = ks_api_client.ReportsApi(self.api_client)\
+                .get_fno_order_detail_by_order_id(order_id, self.consumer_key, \
+                self.session_token, 'y')
         else:
-            order_report  =  ks_api_client.ReportsApi(self.api_client).get_order_report_by_order_id(order_id,self.consumer_key, \
+            order_report  =  ks_api_client.ReportsApi(self.api_client)\
+                .get_order_report_by_order_id(order_id,self.consumer_key, \
                 self.session_token)
         return order_report
 
@@ -206,6 +233,10 @@ class KSTradeApi():
         margin_required  =  ks_api_client.MarginApi(self.api_client).margin_required(self.consumer_key,self.session_token,
                 ReqMargin = req_margin)
         return margin_required
+
+    def get_margins(self):
+        margins = ks_api_client.MarginApi(self.api_client).get_margins(self.consumer_key,self.session_token)
+        return margins
 		
 #-----------------------Quote Api------------------------	
 
@@ -229,9 +260,9 @@ class KSTradeApi():
 #-----------------------Get Order Id-------------
     def get_order_id(self, order_res):
         if(order_res.get("Success")):
-            order = order_res.get("Success");
+            order = order_res.get("Success")
         elif(order_res.get("success")):
-            order = order_res.get("success");
+            order = order_res.get("success")
         if (order.get("NSE") and order.get("BSE")):
             if(order.get("NSE").get("orderId")):
                 order = order.get("NSE")
@@ -282,3 +313,65 @@ class KSTradeApi():
         for obj in array:
             new_array.append(self.convertObject(obj))
         return new_array
+
+
+    def subscribe(self, input_tokens, callback, auth_token, broadcast_host="https://wstreamer.kotaksecurities.com"):
+        try:
+            proxy = ""
+            if self._proxy_pass or self._proxy_url or self._proxy_user:
+                import urllib.parse
+                import requests
+                session = requests.session()
+                scheme = ""
+                parsed = urllib.parse.urlparse(self._proxy_url)
+                if not parsed.scheme:
+                    scheme = "http://"
+                else:
+                    scheme += parsed.scheme+"://"
+                if self._proxy_pass and self._proxy_user:
+                    proxy += scheme + ":".join((self._proxy_user, self._proxy_pass)) +\
+                        "@" + parsed.hostname
+                    if parsed.port:
+                        proxy += ":" + str(parsed.port)
+                    session.proxies.update({'http':proxy, 'https':proxy})
+                    session.verify = 's' in scheme
+            # Generating base64 encoding of consumer credentials
+            AUTH_BASE64 = base64.b64encode(auth_token.encode("UTF-8"))
+            PAYLOAD = {"authentication": AUTH_BASE64.decode("UTF-8")}
+            # Getting access token
+            response = session.post(urllib.parse.urljoin(broadcast_host,"feed/auth/token"),
+                data=PAYLOAD)
+            jsonResponse = response.json()
+            # Check if we got access token
+            if jsonResponse['result']['token'] is None:
+                print('Token not found')
+            else:
+                self.sio = socketio.Client(
+                    reconnection=True, request_timeout=20, reconnection_attempts=5, engineio_logger=True, 
+                            logger=True,http_session=session, ssl_verify=session.verify)
+
+                @self.sio.event
+                def connect():
+                    self.sio.emit('pageload', {'inputtoken': input_tokens})
+
+                @self.sio.event
+                def connect_error(data):
+                    print("Connection failed")
+
+                @self.sio.event
+                def disconnect():
+                    print('Connection closed')
+
+                @self.sio.on('getdata')
+                def on_getdata(data, callback=callback):
+                    callback(data)
+                
+                # Do the connection using above access token
+                self.sio.connect(broadcast_host, 
+                        headers={'Authorization': 'Bearer ' + jsonResponse['result']['token']},
+                        transports=["websocket"], socketio_path='/feed')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
+    
+    def unsubscribe(self):
+        self.sio.disconnect()

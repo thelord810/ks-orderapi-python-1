@@ -1,5 +1,6 @@
 # coding: utf-8
 
+
 import pprint
 import re  # noqa: F401
 
@@ -9,8 +10,7 @@ from ks_api_client.configuration import Configuration
 
 
 class ExistingMTFOrder(object):
-    """
-    """
+    
 
     """
     Attributes:

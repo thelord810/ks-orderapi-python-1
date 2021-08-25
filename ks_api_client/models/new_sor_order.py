@@ -1,5 +1,6 @@
 # coding: utf-8
 
+
 import pprint
 import re  # noqa: F401
 
@@ -9,8 +10,7 @@ from ks_api_client.configuration import Configuration
 
 
 class NewSOROrder(object):
-    """
-    """
+    
 
     """
     Attributes:
@@ -83,7 +83,7 @@ class NewSOROrder(object):
     def instrumentToken(self):
         """Gets the instrumentToken of this NewSOROrder.  # noqa: E501
 
-        Instrument token of the scrip to be traded  # noqa: E501
+        Instrument token of the scrip to be traded.<br> Instrument tokens can be found at the following urls (NOTE: Please replace DD_MM_YYYY with the latest date for updated instrument tokens, for example 27_05_2021 will give tokens for 27 may):<br> Equity: https://preferred.kotaksecurities.com/security/production/TradeApiInstruments_Cash_DD_MM_YYYY.txt <br> Derivatives: https://preferred.kotaksecurities.com/security/production/TradeApiInstruments_FNO_DD_MM_YYYY.txt  # noqa: E501
 
         :return: The instrumentToken of this NewSOROrder.  # noqa: E501
         :rtype: int
@@ -94,7 +94,7 @@ class NewSOROrder(object):
     def instrumentToken(self, instrumentToken):
         """Sets the instrumentToken of this NewSOROrder.
 
-        Instrument token of the scrip to be traded  # noqa: E501
+        Instrument token of the scrip to be traded.<br> Instrument tokens can be found at the following urls (NOTE: Please replace DD_MM_YYYY with the latest date for updated instrument tokens, for example 27_05_2021 will give tokens for 27 may):<br> Equity: https://preferred.kotaksecurities.com/security/production/TradeApiInstruments_Cash_DD_MM_YYYY.txt <br> Derivatives: https://preferred.kotaksecurities.com/security/production/TradeApiInstruments_FNO_DD_MM_YYYY.txt  # noqa: E501
 
         :param instrumentToken: The instrumentToken of this NewSOROrder.  # noqa: E501
         :type instrumentToken: int

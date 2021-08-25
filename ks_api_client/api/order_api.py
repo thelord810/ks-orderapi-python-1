@@ -1,5 +1,6 @@
 # coding: utf-8
 
+
 from __future__ import absolute_import
 
 import re  # noqa: F401
@@ -15,7 +16,7 @@ from ks_api_client.exceptions import (  # noqa: F401
 
 
 class OrderApi(object):
-    
+
     def __init__(self, api_client=None):
         if api_client is None:
             api_client = ApiClient()

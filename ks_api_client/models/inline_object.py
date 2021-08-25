@@ -9,7 +9,7 @@ import six
 from ks_api_client.configuration import Configuration
 
 
-class Codmodify(object):
+class InlineObject(object):
     
 
     """
@@ -20,47 +20,47 @@ class Codmodify(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'orderNo': 'str'
+        'userid': 'str'
     }
 
     attribute_map = {
-        'orderNo': 'orderNo'
+        'userid': 'userid'
     }
 
-    def __init__(self, orderNo=None, local_vars_configuration=None):  # noqa: E501
-        """Codmodify - a model defined in OpenAPI"""  # noqa: E501
+    def __init__(self, userid=None, local_vars_configuration=None):  # noqa: E501
+        """InlineObject - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
         self.local_vars_configuration = local_vars_configuration
 
-        self._orderNo = None
+        self._userid = None
         self.discriminator = None
 
-        if orderNo is not None:
-            self.orderNo = orderNo
+        if userid is not None:
+            self.userid = userid
 
     @property
-    def orderNo(self):
-        """Gets the orderNo of this Codmodify.  # noqa: E501
+    def userid(self):
+        """Gets the userid of this InlineObject.  # noqa: E501
 
-        Order Number to modify  # noqa: E501
+        Userid for which  access code validation  # noqa: E501
 
-        :return: The orderNo of this Codmodify.  # noqa: E501
+        :return: The userid of this InlineObject.  # noqa: E501
         :rtype: str
         """
-        return self._orderNo
+        return self._userid
 
-    @orderNo.setter
-    def orderNo(self, orderNo):
-        """Sets the orderNo of this Codmodify.
+    @userid.setter
+    def userid(self, userid):
+        """Sets the userid of this InlineObject.
 
-        Order Number to modify  # noqa: E501
+        Userid for which  access code validation  # noqa: E501
 
-        :param orderNo: The orderNo of this Codmodify.  # noqa: E501
-        :type orderNo: str
+        :param userid: The userid of this InlineObject.  # noqa: E501
+        :type userid: str
         """
 
-        self._orderNo = orderNo
+        self._userid = userid
 
     def to_dict(self):
         """Returns the model properties as a dict"""
@@ -96,14 +96,14 @@ class Codmodify(object):
 
     def __eq__(self, other):
         """Returns true if both objects are equal"""
-        if not isinstance(other, Codmodify):
+        if not isinstance(other, InlineObject):
             return False
 
         return self.to_dict() == other.to_dict()
 
     def __ne__(self, other):
         """Returns true if both objects are not equal"""
-        if not isinstance(other, Codmodify):
+        if not isinstance(other, InlineObject):
             return True
 
         return self.to_dict() != other.to_dict()
