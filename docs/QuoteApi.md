@@ -47,6 +47,33 @@ Name | Type | Description  | Notes
 
 object
 
+### Sample response
+
+```python
+{
+  "success": [
+    {
+      "wtoken": "110",
+      "ltp": "40.4500",
+      "lv_net_chg": "0.011000000000000001",
+      "lv_net_chg_perc": "0.027954",
+      "open_price": "40.0000",
+      "closing_price": "39.3500",
+      "high_price": "40.4500",
+      "low_price": "39.8000",
+      "average_trade_price": "40.3900",
+      "last_trade_qty": "1472",
+      "BD_last_traded_time": "25/08/2021 11:41:20",
+      "OI": "0",
+      "BD_TTQ": "1658",
+      "market_exchange": "BSE",
+      "stk_name": "CORALFINAC",
+      "display_segment": "EQ",
+      "display_fno_eq": ""
+    }
+  ]
+}
+```
 
 ### HTTP request headers
 

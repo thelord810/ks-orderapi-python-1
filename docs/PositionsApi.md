@@ -43,6 +43,58 @@ Name | Type | Description  | Notes
 
 **object**
 
+### Sample response
+```python
+{
+  "Success": [
+    {
+      "actualNetTrdValue": 0,
+      "averageStockPrice": 0,
+      "buyOpenQtyLot": 1,
+      "buyOpenVal": 2133,
+      "buyTradedQtyLot": 0,
+      "buyTradedVal": 0,
+      "buyTrdAvg": 0,
+      "deliveryStatus": 0,
+      "denominator": 1,
+      "exchange": "NN",
+      "expiryDate": "-",
+      "exposureMargin": 0,
+      "exposureMarginTotal": 0,
+      "grossUtilization": 426.6,
+      "instrumentName": "ACC-EQ",
+      "instrumentToken": 727,
+      "lastPrice": 2274,
+      "marginType": "N",
+      "marketLot": 1,
+      "maxCODQty": 1,
+      "multiplier": 1,
+      "netChange": -18,
+      "netTrdQtyLot": 0,
+      "netTrdValue": 0,
+      "normalSqOffQty": 0,
+      "optionType": "- ",
+      "percentChange": -0.01,
+      "premium": 0,
+      "qtyUnit": "",
+      "rbiRefRate": 1,
+      "realizedPL": 0,
+      "segment": "EQ",
+      "sellOpenQtyLot": 0,
+      "sellOpenVal": 0,
+      "sellTradedQtyLot": 0,
+      "sellTradedVal": 0,
+      "sellTrdAvg": 0,
+      "spanMargin": 0,
+      "spanMarginTotal": 0,
+      "spreadTotal": 0,
+      "strikePrice": 0,
+      "symbol": "ACC",
+      "totalStock": 0
+    }
+  ]
+}
+```
 
 ### HTTP request headers
 

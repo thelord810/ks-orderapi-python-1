@@ -43,11 +43,53 @@ except Exception as e:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **order_id** | **str**|  Order ID of the order  | [optional]
+ **is_fno** | **bool** | Is order of FNO type? | [optional]
 
 ### Return type
 
 object
 
+### Sample response
+```python3
+{
+  "success": [
+    {
+      "activityTimestamp": "Aug 25 2021 10:24:04:000AM",
+      "disclosedQuantity": 0,
+      "exchOrderId": "",
+      "exchTradeId": "-",
+      "exchangeStatus": "Order sent to Exchange",
+      "filledQuantity": 0,
+      "message": "",
+      "orderQuantity": 1,
+      "price": 0,
+      "status": "NEWF",
+      "statusInfo": "Confirmation Pending",
+      "statusMessage": "Confirmation pending from Exchange",
+      "triggerPrice": 0,
+      "validity": "Good For Day",
+      "version": 1
+    },
+    {
+      "activityTimestamp": "Aug 25 2021 10:24:05:000AM",
+      "disclosedQuantity": 0,
+      "exchOrderId": "1000000000002144",
+      "exchTradeId": "-",
+      "exchangeStatus": "Order Confirmed",
+      "filledQuantity": 0,
+      "message": "",
+      "orderQuantity": 1,
+      "price": 0,
+      "status": "OPN",
+      "statusInfo": "",
+      "statusMessage": "Open",
+      "triggerPrice": 0,
+      "validity": "Good For Day",
+      "version": 2
+    }
+  ]
+}
+```
 
 ### HTTP request headers
 

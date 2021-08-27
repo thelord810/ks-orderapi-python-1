@@ -47,6 +47,27 @@ Name | Type | Description  | Notes
 
 **object**
 
+### Sample response
+```python
+{
+  "Success": [
+    {
+      "instrumentToken": 727,
+      "mtf": 325,
+      "normal": 260,
+      "superMultiple": 227
+    },
+    {
+      "instrumentToken": 1374,
+      "mtf": 0,
+      "normal": 240,
+      "superMultiple": 99.2
+    }
+  ]
+}
+
+```
+
 
 ### HTTP request headers
 

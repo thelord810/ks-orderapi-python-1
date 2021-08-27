@@ -96,11 +96,35 @@ Name | Type | Description  | Notes
 
 object
 
+### Sample response
+```python
+{
+    'Success': 
+    {   
+        'Status': 'Temporary', 
+        'accessCodeTime': '8/30/2021 12:01:00 AM',
+        'biometric': 'N', 
+        'clientType': 'ONLINE',
+        'emailId': 'XXXXXXXXXXXXX@kotak.com',
+        'message': 'Authentication Successful.',
+        'mpin': 'N', 
+        'oneTimeToken': 'BE45003A04F44B57926EF852978BC53A', 
+        'phoneNo': 'XXXXXXX828', 
+        'redirect': 
+            {
+                'host': 'https://sbx.kotaksecurities.com/apim', 
+                'port': 443,
+                'userid': 'S4MPL3'
+            }
+    }
+}
+```
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -147,11 +171,120 @@ except Exception as e:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **access_code** | **str**|  |
+ **access_code** | **str**|  | [optional]
 
 ### Return type
 
 object
+
+### Sample response
+
+```python
+{
+  "advancedChart": {
+    "host": "https://kotaksecurities.com/chartiqtrade/",
+    "port": 443
+  },
+  "apiToken": {
+    "redirect": {
+      "host": "https://uattradeapi.kotaksecurities.com",
+      "port": 443
+    },
+    "sessionId": "868457#0-2044"
+  },
+  "broadcast": {
+    "host": "https://dtstream.kotaksecurities.com/",
+    "port": 443
+  },
+  "clientCode": "S4ML3",
+  "clientName": "KOTAK",
+  "dormantType": "-",
+  "emailId": "",
+  "enabledExchangeSegments": {
+    "CASH": [
+      {
+        "exchange": "NSE",
+        "status": "ACTIVE"
+      },
+      {
+        "exchange": "BSE",
+        "status": "ACTIVE"
+      }
+    ],
+    "CDS": [
+      {
+        "exchange": "NSE",
+        "status": "ACTIVE"
+      },
+      {
+        "exchange": "MCX",
+        "status": "ACTIVE"
+      }
+    ],
+    "COMMODITY": [
+      {
+        "exchange": "MCX",
+        "status": "INACTIVE"
+      }
+    ],
+    "FNO": [
+      {
+        "exchange": "NSE",
+        "status": "ACTIVE"
+      },
+      {
+        "exchange": "BSE",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  "enabledProducts": [
+    "NORMAL",
+    "SUPERMULTIPLE",
+    "SUPERMULTIPLEOPTION",
+    "MTF",
+    "MIS"
+  ],
+  "enabledSegments": [
+    "CASH",
+    "FO",
+    "CDS"
+  ],
+  "getLtp": {
+    "host": "https://mksapi.kotaksecurities.com",
+    "port": 443
+  },
+  "isNRI": "N",
+  "loginTime": "8/23/2021 11:29:35 AM",
+  "marginProduct": {
+    "isEnabled": "Y"
+  },
+  "marketData": {
+    "host": "https://mksapi.kotaksecurities.com",
+    "port": 443
+  },
+  "phoneNo": "",
+  "redirect": {
+    "host": "https://sbx.kotaksecurities.com/apim",
+    "port": 443
+  },
+  "search": {
+    "host": "https://mksapi.kotaksecurities.com/",
+    "port": 443
+  },
+  "service": {
+    "host": "https://sbx.kotaksecurities.com/apim",
+    "port": 443
+  },
+  "sessionToken": "BC604B4A88FF4722844ED8FC3D395DAE",
+  "stwtFlag": "Y",
+  "userId": "1T040",
+  "weblink": {
+    "host": "https://mtrade.kotaksecurities.com/",
+    "port": 443
+  }
+}
+```
 
 
 ### HTTP request headers
@@ -203,6 +336,16 @@ except Exception as e:
 
 object
 
+### Sample respose
+
+```python
+{
+  "Success": {
+    "message": "Logout Successful."
+  }
+}
+
+```
 
 ### HTTP request headers
 

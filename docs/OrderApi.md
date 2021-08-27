@@ -55,7 +55,21 @@ Name | Type | Description  | Notes
 
 **object**
 
+### Sample response
 
+```python
+{
+  "Success": {
+    "NSE": {
+      "message": "Your Order has been Placed and Forwarded to the Exchange: 2210823000018.",
+      "orderId": 2210823000018,
+      "price": 1801,
+      "quantity": 1,
+      "tag": "string"
+    }
+  }
+}
+```
 ### HTTP request headers
 
  - **Content-Type**: application/json
@@ -115,6 +129,21 @@ Name | Type | Description  | Notes
 
 **object**
 
+### Sample response
+
+```python
+{
+  "Success": {
+    "NSE": {
+      "message": "Your Order has been Modified Successfully for Order No : 2210825000008",
+      "orderId": 2210825000008,
+      "price": 1804,
+      "quantity": 1,
+      "tag": ""
+    }
+  }
+}
+```
 
 ### HTTP request headers
 
@@ -169,6 +198,21 @@ Name | Type | Description  | Notes
 
 **object**
 
+### Sample response
+
+```python
+{
+  "Success": {
+    "NSE": {
+      "message": "Your Order for ACC EQ NSE has been Cancelled Successfully for Order No : 2210825000008",
+      "orderId": 2210825000008,
+      "price": 0,
+      "quantity": 0,
+      "tag": ""
+    }
+  }
+}
+```
 
 ### HTTP request headers
 
