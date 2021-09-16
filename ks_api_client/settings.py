@@ -1,5 +1,4 @@
-host = ["https://tradeapi.kotaksecurities.com/apim",
-        "https://sbx.kotaksecurities.com/apim"]
+host = "https://sbx.kotaksecurities.com/apim"
 access_token = ""
 userid = ""
 consumer_key = ""
