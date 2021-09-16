@@ -1,3 +1,4 @@
+from re import S
 import ks_api_client
 import base64
 import json
@@ -12,10 +13,10 @@ from ks_api_client.models import NewMTFOrder, NewNormalOrder, NewOrder, \
                 UserCredentials, UserDetails, NewMISOrder, InlineObject
 
 class KSTradeApi():
-    def __init__(self, access_token, userid, consumer_key, ip, app_id, 
-            hosts=["https://tradeapi.kotaksecurities.com/apim","https://sbx.kotaksecurities.com/apim"],
+    def __init__(self, access_token, userid, consumer_key, ip, app_id, host = None,
             proxy_url = '', proxy_user = '', proxy_pass = ''):
         self.userid  =  userid
+        self.host = host
         self.consumer_key  =  consumer_key
         self.ip  =  ip
         self.app_id  =  app_id
@@ -24,30 +25,42 @@ class KSTradeApi():
         self._proxy_pass = proxy_pass
         self._proxy_url = proxy_url
         error = None
-        session_init = None
-        for host in hosts:
-            self.host = host
-            configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
-            try:
-                self.api_client  =  ks_api_client.ApiClient(configuration)
-                session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
-                                self.consumer_key, self.ip, self.app_id)
-            except ApiException as ex:
-                error = ex
-                continue
+        self.__session_init = None
+
+        def init_session(self, session_init_res):
             if(session_init_res.get("Success")):
-                session_init = session_init_res.get("Success")
+                self.__session_init = session_init_res.get("Success")
             elif(session_init_res.get("success")):
-                session_init = session_init_res.get("success")
-            if self.host !=  session_init['redirect']['host']:
-                self.host  =  session_init['redirect']['host']
+                self.__session_init = session_init_res.get("success")
+            if self.host !=  self.__session_init['redirect']['host']:
+                self.host  =  self.__session_init['redirect']['host']
                 configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
                 self.api_client  =  ks_api_client.ApiClient(configuration)
-                session_init  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
+                self.__session_init  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
                                 self.consumer_key, self.ip, self.app_id)
-            break
-        if not session_init and error:
+        if self.host:
+            configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+            self.api_client  =  ks_api_client.ApiClient(configuration)
+            session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
+                            self.consumer_key, self.ip, self.app_id)
+            init_session(self, session_init_res)
+        else:
+            hosts = ["https://tradeapi.kotaksecurities.com/apim","https://sbx.kotaksecurities.com/apim"]
+            for host in hosts:
+                self.host = host
+                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+                try:
+                    self.api_client  =  ks_api_client.ApiClient(configuration)
+                    session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
+                                    self.consumer_key, self.ip, self.app_id)
+                except ApiException as ex:
+                    error = ex
+                    continue
+                init_session(self, session_init_res)
+                break
+        if not self.__session_init and error:
             raise error
+        del self.__session_init
 
     def get_config(self, proxy_url = '', proxy_user = '', proxy_pass = ''):
         configuration  =  ks_api_client.Configuration(self.host)

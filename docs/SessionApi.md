@@ -37,7 +37,7 @@ Name | Type | Description  | Notes
  **consumer_key** | **str**|  |
  **ip** | **str**|  |
  **app_id** | **str**|  |
- **host** | **list**| List of trade API host URLs | [optional]
+ **host** | **str**| API host URL| [optional]
  **proxy_url** | **str**| Proxy url  |  [optional]
  **proxy_user** | **str**| Proxy user's Username | [optional]
  **proxy_pass** | **str**| Proxy user's Password | [optional]

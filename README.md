@@ -48,10 +48,9 @@ from ks_api_client import ks_api
 client = ks_api.KSTradeApi(access_token = "", userid = "", \
                 consumer_key = "", ip = "127.0.0.1", app_id = "")
 
-#For using specific environment use hosts as ["https://tradeapi.kotaksecurities.com/apim","https://ctradeapi.kotaksecurities.com/apim"]
-client = ks_api.KSTradeApi(access_token = "", userid = "", \
-                consumer_key = "", ip = "127.0.0.1", app_id = "", 
-                hosts = ["https://tradeapi.kotaksecurities.com/apim","https://ctradeapi.kotaksecurities.com/apim"])
+#For using specific environment use host="https://tradeapi.kotaksecurities.com/apim"
+client = ks_api.KSTradeApi(access_token = "", userid = "", consumer_key = "", 
+                ip = "127.0.0.1", app_id = "",  host ="https://sbx.kotaksecurities.com/apim")
 		
 # Get session for user
 client.login(password = "")
