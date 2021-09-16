@@ -43,20 +43,24 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```python
 from ks_api_client import ks_api
-# Defining the host is optional and defaults to https://tradeapi.kotaksecurities.com/apim
+# Defining the hosts is optional and defaults to ["https://tradeapi.kotaksecurities.com/apim","https://ctradeapi.kotaksecurities.com/apim"]
 # See configuration.py for a list of all supported configuration parameters.
 client = ks_api.KSTradeApi(access_token = "", userid = "", \
                 consumer_key = "", ip = "127.0.0.1", app_id = "")
 
-#For using sandbox environment use host as https://sbx.kotaksecurities.com/apim
+#For using specific environment use hosts as ["https://tradeapi.kotaksecurities.com/apim","https://ctradeapi.kotaksecurities.com/apim"]
 client = ks_api.KSTradeApi(access_token = "", userid = "", \
-                consumer_key = "", ip = "127.0.0.1", app_id = "", host = "https://sbx.kotaksecurities.com/apim")
+                consumer_key = "", ip = "127.0.0.1", app_id = "", 
+                hosts = ["https://tradeapi.kotaksecurities.com/apim","https://ctradeapi.kotaksecurities.com/apim"])
 		
 # Get session for user
 client.login(password = "")
 
 #Generated session token
 client.session_2fa(access_code = "")
+
+#Generate session token without access code [Optional]
+client.session_2fa()
 
 # Place an order
 client.place_order(order_type = "N", instrument_token = 727, transaction_type = "BUY",\
