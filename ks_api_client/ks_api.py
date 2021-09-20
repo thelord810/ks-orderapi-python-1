@@ -4,6 +4,8 @@ import base64
 import json
 import os
 import socketio
+import requests
+import urllib.parse
 from urllib3 import make_headers
 
 from ks_api_client.exceptions import ApiException, ApiValueError
@@ -328,13 +330,11 @@ class KSTradeApi():
         return new_array
 
 
-    def subscribe(self, input_tokens, callback, auth_token, broadcast_host="https://wstreamer.kotaksecurities.com"):
+    def subscribe(self, input_tokens, auth_token, callback=print, broadcast_host="https://wstreamer.kotaksecurities.com"):
         try:
             proxy = ""
+            session = requests.session()
             if self._proxy_pass or self._proxy_url or self._proxy_user:
-                import urllib.parse
-                import requests
-                session = requests.session()
                 scheme = ""
                 parsed = urllib.parse.urlparse(self._proxy_url)
                 if not parsed.scheme:

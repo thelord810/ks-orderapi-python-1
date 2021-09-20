@@ -89,6 +89,9 @@ order_info = [
 ]
 client.margin_required(transaction_type = "BUY",order_info = order_info)
 
+# Get calculate margins
+client.get_margins()
+
 # Get Positions
 client.positions(position_type = "TODAYS")
 
@@ -101,12 +104,21 @@ client.history("historicalprices-unadjusted",{"exchange":"bse","co_code":"476","
 client.history("NSEFNO_HistoricalContinuousChart",{"symbol":"HDFC","expiry type": "near"})
 client.history("LiveorEODHistorical",{"exchange":"BSE","co_code":"5400","period":"Y","cnt":"3"})
 
+# Subscribe to instrument token's stream.
+def callback_method(message):
+    print(message)
+    print("Your logic/computation will come here.")
+client.subscribe(input_token="745,754", auth_token="", callback=callback_method)
+
+# Unsubscribe from streaming service.
+client.unsubscribe()
+
 #Terminate user's Session
 client.logout()
 ```
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://tradeapi.kotaksecurities.com/apim*
+All URIs are relative to *https://tradeapi.kotaksecurities.com/apim* and *https://ctradeapi.kotaksecurities.com/apim*
 
 Class | Method | Description
 ------------ | ------------- | -------------
@@ -119,9 +131,12 @@ Class | Method | Description
 *ReportsApi* | [**order_report**](docs/ReportsApi.md#order_report) | Get order report
 *ReportsApi* | [**trade_report**](docs/ReportsApi.md#trade_report) | Get trade report
 *MarginApi* | [**margin_required**](docs/MarginApi.md#margin_required) | Get Margin Required for an order by amount or quantity.
+*MarginApi* | [**get_margins**](docs/MarginApi.md#get_margins) | Get all calculated margins.
 *PositionsApi* | [**positions**](docs/PositionsApi.md#positions) | Get&#39;s Open position.
 *QuoteApi* | [**quote**](docs/QuoteApi.md#quote_details) | Get Quote details
 *HistoricalApi* | [**history**](docs/HistoricalApi.md#history) | Get historical data.
+*StreamingApi* | [**subscribe**](docs/StreamingApi.md#subscribe) | Subscribe to streaming api of specified instrument tokens.
+*StreamingApi* | [**unsubscribe**](docs/StreamingApi.md#unsubscribe) | Unsubscribe from streaming api.
 *SessionApi* | [**logout**](docs/SessionApi.md#logout) | Invalidate Session Token
 
 
