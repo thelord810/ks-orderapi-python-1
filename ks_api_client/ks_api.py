@@ -16,7 +16,7 @@ from ks_api_client.models import NewMTFOrder, NewNormalOrder, NewOrder, \
 
 class KSTradeApi():
     def __init__(self, access_token, userid, consumer_key, ip, app_id, host = None,
-            proxy_url = '', proxy_user = '', proxy_pass = ''):
+            proxy_url = '', proxy_user = '', proxy_pass = '', verify_ssl=True):
         self.userid  =  userid
         self.host = host
         self.consumer_key  =  consumer_key
@@ -26,6 +26,7 @@ class KSTradeApi():
         self._proxy_user = proxy_user
         self._proxy_pass = proxy_pass
         self._proxy_url = proxy_url
+        self._verify_ssl = verify_ssl
         error = None
         self.__session_init = None
 
@@ -36,12 +37,12 @@ class KSTradeApi():
                 self.__session_init = session_init_res.get("success")
             if self.host !=  self.__session_init['redirect']['host']:
                 self.host  =  self.__session_init['redirect']['host']
-                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass, verify_ssl)
                 self.api_client  =  ks_api_client.ApiClient(configuration)
                 self.__session_init  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
                                 self.consumer_key, self.ip, self.app_id)
         if self.host:
-            configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+            configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass, verify_ssl)
             self.api_client  =  ks_api_client.ApiClient(configuration)
             session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
                             self.consumer_key, self.ip, self.app_id)
@@ -50,7 +51,7 @@ class KSTradeApi():
             hosts = ["https://tradeapi.kotaksecurities.com/apim","https://sbx.kotaksecurities.com/apim"]
             for host in hosts:
                 self.host = host
-                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass)
+                configuration  =  self.get_config(proxy_url, proxy_user, proxy_pass, verify_ssl)
                 try:
                     self.api_client  =  ks_api_client.ApiClient(configuration)
                     session_init_res  =  ks_api_client.SessionApi(self.api_client).session_init(self.userid, \
@@ -64,13 +65,15 @@ class KSTradeApi():
             raise error
         del self.__session_init
 
-    def get_config(self, proxy_url = '', proxy_user = '', proxy_pass = ''):
+    def get_config(self, proxy_url = '', proxy_user = '', proxy_pass = '', verify_ssl=True):
         configuration  =  ks_api_client.Configuration(self.host)
         configuration.access_token  =  self.access_token
         if proxy_url:
             configuration.proxy = proxy_url
             if proxy_user:
                 configuration.proxy_headers = make_headers(proxy_basic_auth = ':'.join((proxy_user,proxy_pass)))
+            if not verify_ssl:
+                configuration.verify_ssl = False
         return configuration
 
     def login(self, password):
@@ -347,7 +350,7 @@ class KSTradeApi():
                     if parsed.port:
                         proxy += ":" + str(parsed.port)
                     session.proxies.update({'http':proxy, 'https':proxy})
-                    session.verify = 's' in scheme
+                    session.verify = self._verify_ssl
             # Generating base64 encoding of consumer credentials
             AUTH_BASE64 = base64.b64encode(auth_token.encode("UTF-8"))
             PAYLOAD = {"authentication": AUTH_BASE64.decode("UTF-8")}
@@ -378,8 +381,7 @@ class KSTradeApi():
                 @self.sio.on('getdata')
                 def on_getdata(data, callback=callback):
                     callback(data)
-                
-                # Do the connection using above access token
+
                 self.sio.connect(broadcast_host, 
                         headers={'Authorization': 'Bearer ' + jsonResponse['result']['token']},
                         transports=["websocket"], socketio_path='/feed')
