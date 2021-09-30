@@ -252,7 +252,7 @@ class KSTradeApi():
                 ReqMargin = req_margin)
         return margin_required
 
-    def get_margins(self):
+    def margins(self):
         margins = ks_api_client.MarginApi(self.api_client).get_margins(self.consumer_key,self.session_token)
         return margins
 		
@@ -311,7 +311,8 @@ class KSTradeApi():
                 raise ApiValueError("exchange,co_code,period,cnt fields are required.")    
         encoded_json = base64.urlsafe_b64encode(json.dumps(json_input).encode()).decode()
         data = ks_api_client.HistoricalApi(self.api_client).get_resource(resource,encoded_json)
-        return data					 
+        return data
+			 
 #-------- Convert Array and object snake_case keys to camelCase -----------
     def convertObject(self, object):  
         newObj={}
