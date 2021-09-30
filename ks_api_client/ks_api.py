@@ -252,7 +252,7 @@ class KSTradeApi():
                 ReqMargin = req_margin)
         return margin_required
 
-    def margins(self):
+    def margin(self):
         margins = ks_api_client.MarginApi(self.api_client).get_margins(self.consumer_key,self.session_token)
         return margins
 		
@@ -334,8 +334,9 @@ class KSTradeApi():
         return new_array
 
 
-    def subscribe(self, input_tokens, auth_token, callback=print, broadcast_host="https://wstreamer.kotaksecurities.com"):
+    def subscribe(self, input_tokens, consumer_key, consumer_secrete, callback=print, broadcast_host="https://wstreamer.kotaksecurities.com"):
         try:
+            auth_token = ":".join(consumer_key, consumer_secrete)
             proxy = ""
             session = requests.session()
             if self._proxy_pass or self._proxy_url or self._proxy_user:
@@ -365,7 +366,7 @@ class KSTradeApi():
             else:
                 self.sio = socketio.Client(
                     reconnection=True, request_timeout=20, reconnection_attempts=5, engineio_logger=True, 
-                            logger=True,http_session=session, ssl_verify=session.verify)
+                            logger=True, http_session=session, ssl_verify=session.verify)
 
                 @self.sio.event
                 def connect():
