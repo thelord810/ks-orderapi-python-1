@@ -336,7 +336,7 @@ class KSTradeApi():
 
     def subscribe(self, input_tokens, consumer_key, consumer_secrete, callback=print, broadcast_host="https://wstreamer.kotaksecurities.com"):
         try:
-            auth_token = ":".join(consumer_key, consumer_secrete)
+            auth_token = ":".join((consumer_key, consumer_secrete))
             proxy = ""
             session = requests.session()
             if self._proxy_pass or self._proxy_url or self._proxy_user:
