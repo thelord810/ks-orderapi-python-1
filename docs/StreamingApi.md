@@ -26,7 +26,7 @@ client = ks_api.KSTradeApi(access_token = "access_token", userid = "userid", \
 
 try:
     # Get Margin Required for an order by amount or quantity.
-    client.subscribe(input_tokens="", auth_token="", callback=print, broadcast_host="https://wstreamer.kotaksecurities.com")
+    client.subscribe(input_tokens="", consumer_key="", consumer_secret="", callback=print, broadcast_host="https://wstreamer.kotaksecurities.com")
 except Exception as e:
     print("Exception when calling StreamingApi->subscribe: %s\n" % e)
 ```
@@ -35,8 +35,9 @@ except Exception as e:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**input_token** | **str** | Instrument tokens with comma seperated. | 
-**auth_token** | **str** | Authentication token | 
+**input_tokens** | **str** | Instrument tokens with comma seperated. | Example: "475,745"
+**consumer_key** | **str** | Consumer Key | Mandatory field
+**consumer_secret** | **str** | Consumer Secret | Mandatory field
 **callback** | **obj** | Method object | method of function should have one mandatory parameter to accept message. Default method is print()
 **broadcast_host** | **str** | String host URL | default value: "https://wstreamer.kotaksecurities.com"
 
