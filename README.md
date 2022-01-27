@@ -14,7 +14,7 @@ Python 2.7 and 3.4+
 If the python package is hosted on a repository, you can install directly using:
 
 ```sh
-pip install git+https://github.com/noddy09/ks-orderapi-python.git
+pip install git+https://github.com/thelord810/ks-orderapi-python.git
 ```
 (you may need to run `pip` with root permission: `sudo pip install git+https://github.com/noddy09/ks-orderapi-python.git`)
 
